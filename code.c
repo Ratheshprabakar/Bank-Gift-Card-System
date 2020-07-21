@@ -2,6 +2,7 @@
 #include<stdio.h>
 void acc_create();
 void card_create();
+void card_topup();
 int choice,i=1,j;
 struct acccount_details
 {
@@ -39,10 +40,10 @@ int main()
 					case 1:
 						card_create();
 						break;
-					/*case 2:
+					case 2:
 						card_topup();
 						break;
-					case 3:
+					/*case 3:
 						card_close();
 						break;*/
 					case 4:
@@ -117,6 +118,52 @@ void card_create()
 			main();
 		}
 		
+	}
+	else
+	{
+		printf("\n\nSorry Your CustID is not found, Please create an account!!\n\n");	
+	}
+}
+void card_topup()
+{
+	int id,temp_card,temp_pass,k,temp_amount;
+	printf("Enter Your CustID\t");
+	scanf("%d",&id);
+	if(id<i && id!=0)
+	{
+		printf("\nYour Gift Cards are\n Card No.\tAmount\n");
+		for(k=1;k<card_no;k++)
+		{
+			if(card[k].id==id)
+			{
+				printf(" %d\t%d\n",k,card[k].amount);
+			}
+		}
+		printf("\nWhich Card You wish to topup\nEnter the card No\t");
+		scanf("%d",&temp_card);
+		printf("\nEnter the password\t");
+		scanf("%d",&temp_pass);
+		if(card[temp_card].pin==temp_pass)
+		{
+			printf("Enter the amount you which to topup\t");
+			scanf("%d",&temp_amount);
+			if(temp_amount<=acc[id].balance)
+			{
+				card[temp_card].amount+=temp_amount;
+				acc[id].balance-=temp_amount;
+				printf("\nThank You! Your topup is successful, Amount credited to your gift card\n");			
+			}
+			else
+			{
+				printf("\n\nSorry, Your account doesn't contain sufficient balance to topup your card\n\n");
+				main();
+			}			
+		}
+		else
+		{
+			printf("\nInvalid PIN\n");
+			main();
+		}
 	}
 	else
 	{
