@@ -3,6 +3,7 @@
 void acc_create();
 void card_create();
 void card_topup();
+void card_close();
 int choice,i=1,j;
 struct acccount_details
 {
@@ -14,6 +15,7 @@ struct card_details
 {
 	int id,pin;
 	int amount;
+	int status;
 }card[100];
 char temp_name[100];
 int temp_age;
@@ -43,9 +45,9 @@ int main()
 					case 2:
 						card_topup();
 						break;
-					/*case 3:
+					case 3:
 						card_close();
-						break;*/
+						break;
 					case 4:
 						main();
 						break;
@@ -108,7 +110,8 @@ void card_create()
 			scanf("%d",&card[card_no].pin);
 			card[card_no].amount=temp_balance;
 			acc[id].balance-=temp_balance;
-			temp_balance=0;
+			temp_balance=0;			
+			card[card_no].status=1;
 			printf("Your Gift Card is successfully purchased\nCardNo\tAmount\n%d\t%d",card_no,card[card_no].amount);
 			card_no++;
 		}
@@ -131,19 +134,19 @@ void card_topup()
 	scanf("%d",&id);
 	if(id<i && id!=0)
 	{
-		printf("\nYour Gift Cards are\n Card No.\tAmount\n");
+		printf("\nYour Gift Cards are\nCard No.\tAmount\n");
 		for(k=1;k<card_no;k++)
 		{
-			if(card[k].id==id)
+			if(card[k].id==id && card[k].status==1)
 			{
-				printf(" %d\t%d\n",k,card[k].amount);
+				printf("%d\t%d\n",k,card[k].amount);
 			}
 		}
 		printf("\nWhich Card You wish to topup\nEnter the card No\t");
 		scanf("%d",&temp_card);
 		printf("\nEnter the password\t");
 		scanf("%d",&temp_pass);
-		if(card[temp_card].pin==temp_pass)
+		if(card[temp_card].pin==temp_pass && card[temp_card].status==1)
 		{
 			printf("Enter the amount you which to topup\t");
 			scanf("%d",&temp_amount);
@@ -158,6 +161,43 @@ void card_topup()
 				printf("\n\nSorry, Your account doesn't contain sufficient balance to topup your card\n\n");
 				main();
 			}			
+		}
+		else
+		{
+			printf("\nInvalid PIN or Card\n");
+			main();
+		}
+	}
+	else
+	{
+		printf("\n\nSorry Your CustID is not found, Please create an account!!\n\n");	
+	}
+}
+void card_close()
+{
+	int id,temp_card,temp_pass,k;
+	printf("Enter Your CustID\t");
+	scanf("%d",&id);
+	if(id<i && id!=0)
+	{
+		printf("\nYour Gift Cards are\nCard No.\tAmount\n");
+		for(k=1;k<card_no;k++)
+		{
+			if(card[k].id==id && card[k].status==1)
+			{
+				printf("%d\t%d\n",k,card[k].amount);
+			}
+		}
+		printf("\nWhich Card You wish to close\nEnter the card No\t");
+		scanf("%d",&temp_card);
+		printf("\nEnter the password\t");
+		scanf("%d",&temp_pass);	
+		if(card[temp_card].pin==temp_pass)
+		{
+			acc[id].balance+=card[temp_card].amount;
+			card[temp_card].status=0;
+			printf("\nThank You! Your CardID %d is successful closed and amount %d credited to your bank account\n",temp_card,card[temp_card].amount);
+			card[temp_card].amount=-1;			
 		}
 		else
 		{
