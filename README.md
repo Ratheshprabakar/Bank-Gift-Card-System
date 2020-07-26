@@ -3,3 +3,5 @@ A mini project on C to implement bank management system along with virtual gift 
 
 * Account Creation
 * Gift Card Creation
+* Top up gift card
+* Cancel Gift card
